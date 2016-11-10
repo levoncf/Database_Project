@@ -30,3 +30,14 @@ FROM ENTITY AS E , NAMES AS  N, CUSTOMER AS  C
 WHERE E.name_id == N.id AND
   C.entity_id == E.id;
 ```
+
+* Retrieve a customer's order information
+```SQL
+SELECT C.entity_id, N.fname, N.lname, B.isbn, B.title
+FROM BOOK AS B, ORDERITEM AS O, "ORDER",CUSTOMER AS C,ENTITY AS E, NAMES AS N
+WHERE C.entity_id == E.id AND
+  E.name_id == N.id AND
+  C.entity_id == "ORDER".customer_id AND
+  "ORDER".order_id == O.order_id AND
+  O.product_id == B.isbn;
+```
