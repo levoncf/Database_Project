@@ -83,11 +83,31 @@
   OIT.product_id == B.isbn;
   ```
 
-- Find the titles and ISBNs for all books with less than 5 copies in stock.
-```SQL
+- Find the titles and ISBNs for all books with less than 5 copies in stock. (CHECKED)
+
+  ```sql
+  SELECT B.title, I.ISBN
+  FROM BOOK AS B, ISBN AS I, INVENTORY AS IV
+  WHERE
+  ( B.b_id == I.b_id AND IV.bid == I.b_id AND IV.quantity < 5
+  );
 ```
 - Give all the customers who purchased a book by Pratchett and the titles of Pratchett books they purchased.
-- Find the total number of books purchased by a single customer (you choose how to designate the customer).
+- Find the total number of books purchased by a single customer (you choose how to designate the customer). (CHECKED
+  
+  ```sql
+  SELECT N.fname, SUM(OIT.quantity)
+  FROM BOOK AS B, 'ORDERS' AS O, ORDERITEM AS OIT, NAMES AS N
+  WHERE
+  (SELECT C.entity_id
+  FROM CUSTOMER AS C, ENTITY AS E
+  WHERE E.name_id == N.id AND
+  C.entity_id == E.id AND
+  N.fname == 'Jane' AND
+  N.lname == 'Gonzalez') == O.customer_id AND
+  O.order_id == OIT.order_id AND
+  OIT.bid == B.b_id;
+
 - Find the customer who has purchased the most books and the total number of books they have purchased.
 - Three more Additional Queries (include joins and at least one include aggregate function and at least one Queries use 'extra' Entities from Checkpoint 1).
 
