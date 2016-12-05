@@ -118,16 +118,19 @@ WHERE C.customer_id = CUSTOMER.entity_id AND
       E.name_id = N.id;
 ```
 - Provide a list of customer names and e-mail addresses for customers who have spent more than the average customer.
-- not yet finish.
 ```SQL
-SELECT customer_id, sum(Total) AS customer_total
-FROM (SELECT T.order_id, customer_id, Total
-                  FROM (SELECT order_id, SUM(quantity * B.price) AS Total
-                        FROM ORDERITEM AS O, BOOK AS B
-                        WHERE B.b_id = O.bid
-                        GROUP BY O.order_id) AS A JOIN ORDER_TRANSACTION AS T
+WITH CustTotals AS (SELECT customer_id, ROUND(sum(Total), 2) AS customer_total
+                    FROM (SELECT T.order_id, customer_id, Total
+                          FROM (SELECT order_id, SUM(quantity * B.price) AS Total
+                                FROM ORDERITEM AS O, BOOK AS B
+                                WHERE B.b_id = O.bid
+                                GROUP BY O.order_id) AS A JOIN ORDER_TRANSACTION AS T
                               ON A.order_id = T.order_id)
-GROUP BY customer_id
+                    GROUP BY customer_id
+                    ORDER BY customer_total DESC)
+SELECT  *
+FROM  CustTotals
+WHERE customer_total > (SELECT AVG(customer_total) FROM (CustTotals))
 ORDER BY customer_total DESC
 ```
 - Provide a list of the titles in the database and associated total copies sold to customers, sorted from the title that has sold the most individual copies to the title that has sold the least.
@@ -193,5 +196,23 @@ WHERE TID.customer_id = E.id AND
   NAMES.id = E.name_id
 ```
 - Provide the list of authors who wrote the books purchased by the customers who have spent more than the average customer.
+```SQL
+
+WITH CustTotals AS (SELECT customer_id, ROUND(sum(Total), 2) AS customer_total
+                    FROM (SELECT T.order_id, customer_id, Total
+                          FROM (SELECT order_id, SUM(quantity * B.price) AS Total
+                                FROM ORDERITEM AS O, BOOK AS B
+                                WHERE B.b_id = O.bid
+                                GROUP BY O.order_id) AS A JOIN ORDER_TRANSACTION AS T
+                              ON A.order_id = T.order_id)
+                    GROUP BY customer_id
+                    ORDER BY customer_total DESC)
+SELECT DISTINCT NAMES.fname AS First_name, NAMES.lname AS Last_name
+FROM CustTotals AS C, (SELECT ORDER_TRANSACTION.order_id  FROM ORDER_TRANSACTION) AS OT, ORDERITEM AS OIT, AUTHOR AS AU, NAMES
+WHERE C.customer_id = OT.order_id AND
+  OT.order_id = OIT.order_id AND
+  AU.b_id = OIT.bid AND
+  AU.name_id = NAMES.id;
+```
 
 ## Checkpoint VIEWS

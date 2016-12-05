@@ -1,0 +1,16 @@
+INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (1, 'OCP: Oracle9i Certification Kit', 1, 2002, 104.97, 11);
+INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (2, 'SQL Server 2000 for Experienced DBA''s', 2, 2003, 34.99, 11);
+INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (3, 'The Data Warehouse Toolkit: The Complete Guide to Dimensional Modeling', 3, 2002, 50, 11);
+INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (4, 'How To Do Everything with Your Tablet PC', 2, 2003, 17.49, 11);
+INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (5, 'Data Mining: Practical Machine Learning Tools and Techniques with Java Implementations', 4, 1999, 49.95, 11);
+INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (6, 'Creating Documents with BusinessObjects 5.1', 5, 2002, 99, 11);
+INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (7, 'The Guru''s Guide to Transact-SQL', 6, 2000, 38.49, 11);
+INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (8, 'Access 2002 Developer''s Handbook Set', 1, 2001, 69.99, 11);
+INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (9, 'ColdFusion MX Web Application Construction Kit', 7, 2002, 38.49, 11);
+INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (10, 'Fundamentals of Database Systems ', 6, 1999, 95, 11);
+INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (11, 'Small Gods', 61, 1994, 7.99, 12);
+INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (12, 'Going Postal', 61, 2005, 7.99, 12);
+INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (13, 'Pyramids', 61, 2001, 7.99, 12);
+INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (14, 'The Color of Magic', 61, 2005, 13.99, 12);
+INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (15, 'Guards! Guards!', 61, 2001, 7.99, 12);
+INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (16, 'Unseen Academicals', 61, 2010, 7.99, 12);
