@@ -1,58 +1,6 @@
-# Basic Queries
+# CheckPoint Queries
 
-- Retrieve all book and list author name
-
-  ```sql
-  SELECT BOOK.isbn, title, N.fname, N.fname
-  FROM BOOK, PUBLISHERS, NAMES AS  N, AUTHOR AS  A
-  WHERE BOOK.pid == PUBLISHERS.pid AND
-  N.id == A.name_id AND
-  BOOK.isbn == A.isbn;
-  ```
-
-- Retrieve all the book published by publisher named 'McGraw-Hill Osborne Media'
-
-  ```sql
-  SELECT title,isbn
-  FROM BOOK, PUBLISHERS
-  WHERE BOOK.pid == PUBLISHERS.pid AND
-  PUBLISHERS.publisher == 'McGraw-Hill Osborne Media';
-  ```
-
-- Retrieve all the book written by author name 'Chip Dawes'
-
-  ```sql
-  SELECT B.isbn, B.title
-  FROM BOOK AS B, AUTHOR AS A , NAMES AS N
-  WHERE B.isbn == A.isbn AND
-  N.id == A.name_id AND
-  N.fname == 'Chip' AND
-  N.lname == 'Dawes';
-  ```
-
-- Retrieve all customer information
-
-  ```sql
-  SELECT C.entity_id, N.fname, N.lname,phone ,email
-  FROM ENTITY AS E , NAMES AS  N, CUSTOMER AS  C
-  WHERE E.name_id == N.id AND
-  C.entity_id == E.id;
-  ```
-
-- Retrieve a customer's order information
-
-  ```sql
-  SELECT C.entity_id, N.fname, N.lname, B.isbn, B.title, O.quantity
-  FROM BOOK AS B, ORDERITEM AS O, "ORDER",CUSTOMER AS C,ENTITY AS E, NAMES AS N
-  WHERE C.entity_id == E.id AND
-  E.name_id == N.id AND
-  C.entity_id == "ORDER".customer_id AND
-  "ORDER".order_id == O.order_id AND
-  O.product_id == B.isbn AND
-  N.fname == 'Jane' AND N.lname == 'Gonzalez';
-  ```
-
-  # Queries from Checkpoint 2
+## Queries from Checkpoint 2
 
 - Find the titles of all books by Pratchett that cost less than $10.
 
@@ -151,7 +99,7 @@ WHERE C.customer_id = CUSTOMER.entity_id AND
 ```
 - Three more Additional Queries (include joins and at least one include aggregate function and at least one Queries use 'extra' Entities from Checkpoint 1).
 
-# Queries from Checkpoint 3
+## Queries from Checkpoint 3
 
 - Provide a list of customer names, along with the total dollar amount each customer has spent.
 ```SQL
@@ -170,8 +118,36 @@ WHERE C.customer_id = CUSTOMER.entity_id AND
       E.name_id = N.id;
 ```
 - Provide a list of customer names and e-mail addresses for customers who have spent more than the average customer.
+- not yet finish.
+```SQL
+SELECT customer_id, sum(Total) AS customer_total
+FROM (SELECT T.order_id, customer_id, Total
+                  FROM (SELECT order_id, SUM(quantity * B.price) AS Total
+                        FROM ORDERITEM AS O, BOOK AS B
+                        WHERE B.b_id = O.bid
+                        GROUP BY O.order_id) AS A JOIN "TRANSACTION" AS T
+                              ON A.order_id = T.order_id)
+GROUP BY customer_id
+ORDER BY customer_total DESC
+```
 - Provide a list of the titles in the database and associated total copies sold to customers, sorted from the title that has sold the most individual copies to the title that has sold the least.
+```SQL
+SELECT title, C.total_quantity
+FROM BOOK AS B, (SELECT bid, SUM(quantity) AS total_quantity
+                 FROM ORDERITEM AS O
+                 GROUP BY O.bid) AS C
+WHERE B.b_id = C.bid
+ORDER BY C.total_quantity DESC
+```
 - Provide a list of the titles in the database and associated dollar totals for copies sold to customers, sorted from the title that has sold the highest dollar amount to the title that has sold the smallest.
+```SQL
+SELECT title, (C.total_quantity * B.price) AS total_dollar_soldn
+FROM BOOK AS B, (SELECT bid, SUM(quantity) AS total_quantity
+                 FROM ORDERITEM AS O
+                 GROUP BY O.bid) AS C
+WHERE B.b_id = C.bid
+ORDER BY C.total_quantity DES
+```
 - Find the most popular author in the database (i.e. the one who has sold the most books).
 - Find the most profitable author in the database for this store (i.e. the one who has brought in the most money).
 - Provide a list of customer information for customers who purchased anything written by the most profitable author in the database.
