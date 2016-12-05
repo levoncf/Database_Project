@@ -19,7 +19,7 @@
 
   ```sql
   SELECT OIT.bid, B.title, OIT.timestamp, OIT.quantity
-  FROM BOOK AS B, "TRANSACTION" AS O, ORDERITEM AS OIT
+  FROM BOOK AS B, ORDER_TRANSACTION AS O, ORDERITEM AS OIT
   WHERE
   (SELECT C.entity_id
   FROM CUSTOMER AS C, ENTITY AS E, NAMES AS N
@@ -49,7 +49,7 @@ WHERE B.b_id IN (SELECT I.b_id
              NAMES.lname LIKE '%Pratchett'AND
              I.b_id = A.b_id) AND
       (SELECT E.name_id
-      FROM  ENTITY AS E, ORDERITEM AS O,"TRANSACTION" AS T, CUSTOMER AS C
+      FROM  ENTITY AS E, ORDERITEM AS O,ORDER_TRANSACTION AS T, CUSTOMER AS C
       WHERE B.b_id = O.bid AND
             O.order_id = T.order_id AND
              T.customer_id = C.entity_id AND
@@ -59,7 +59,7 @@ WHERE B.b_id IN (SELECT I.b_id
 ```SQL
 SELECT  B.fname, B.lname, SUM(quantity) AS Total_Quantity
 FROM ORDERITEM AS O, (SELECT order_id, D.fname, D.lname
-                     FROM "TRANSACTION" AS T, (SELECT C.entity_id, N.fname, N.lname
+                     FROM ORDER_TRANSACTION AS T, (SELECT C.entity_id, N.fname, N.lname
                                              FROM CUSTOMER AS C, ENTITY AS E, NAMES AS N
                                              WHERE N.fname LIKE '%Jane' AND
                                                    N.lname LIKE  '%Gonzalez' AND
@@ -72,7 +72,7 @@ WHERE O.order_id = B.order_id
 SELECT NAMES.fname, NAMES.lname, SUM(quantity) AS Total_Quantity
 FROM ORDERITEM AS O, NAMES
 WHERE O.order_id IN (SELECT order_id
-                     FROM "TRANSACTION" AS T
+                     FROM ORDER_TRANSACTION AS T
                      WHERE T.customer_id IN (SELECT C.entity_id
                                              FROM CUSTOMER AS C, ENTITY AS E, NAMES AS N
                                              WHERE N.fname LIKE '%Jane' AND
@@ -90,7 +90,7 @@ FROM (SELECT customer_id, max(B.customer_total) AS max
             FROM (SELECT T.order_id, customer_id, Total
                   FROM (SELECT order_id, SUM(quantity) AS Total
                         FROM ORDERITEM AS O
-                        GROUP BY O.order_id) AS A JOIN "TRANSACTION" AS T
+                        GROUP BY O.order_id) AS A JOIN ORDER_TRANSACTION AS T
                       ON A.order_id = T.order_id)
             GROUP BY customer_id) AS B) AS C , CUSTOMER, ENTITY AS E, NAMES AS N
 WHERE C.customer_id = CUSTOMER.entity_id AND
@@ -110,7 +110,7 @@ FROM (SELECT customer_id, B.customer_total AS c_total
                   FROM (SELECT order_id, SUM(quantity * B.price) AS Total
                         FROM ORDERITEM AS O, BOOK AS B
                         WHERE B.b_id = O.bid
-                        GROUP BY O.order_id) AS A JOIN "TRANSACTION" AS T
+                        GROUP BY O.order_id) AS A JOIN ORDER_TRANSACTION AS T
                       ON A.order_id = T.order_id)
             GROUP BY customer_id) AS B) AS C , CUSTOMER, ENTITY AS E, NAMES AS N
 WHERE C.customer_id = CUSTOMER.entity_id AND
@@ -125,7 +125,7 @@ FROM (SELECT T.order_id, customer_id, Total
                   FROM (SELECT order_id, SUM(quantity * B.price) AS Total
                         FROM ORDERITEM AS O, BOOK AS B
                         WHERE B.b_id = O.bid
-                        GROUP BY O.order_id) AS A JOIN "TRANSACTION" AS T
+                        GROUP BY O.order_id) AS A JOIN ORDER_TRANSACTION AS T
                               ON A.order_id = T.order_id)
 GROUP BY customer_id
 ORDER BY customer_total DESC
@@ -188,7 +188,7 @@ FROM ENTITY AS E, (SELECT DISTINCT T.customer_id
                                                                                                                FROM ORDERITEM AS O
                                                                                                                GROUP BY O.bid) AS C
                                                                                               WHERE B.b_id = C.bid) AS BD
-                                                             WHERE NA.b_id = BD.bid))) AS OID JOIN "TRANSACTION" AS T ON (OID.order_id = T.order_id)) AS TID, NAMES
+                                                             WHERE NA.b_id = BD.bid))) AS OID JOIN ORDER_TRANSACTION AS T ON (OID.order_id = T.order_id)) AS TID, NAMES
 WHERE TID.customer_id = E.id AND
   NAMES.id = E.name_id
 ```
