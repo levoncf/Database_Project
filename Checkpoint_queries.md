@@ -149,6 +149,49 @@ WHERE B.b_id = C.bid
 ORDER BY C.total_quantity DES
 ```
 - Find the most popular author in the database (i.e. the one who has sold the most books).
+```SQL
+SELECT fname, lname, BD.title
+FROM (SELECT fname, lname, A.b_id
+      FROM (AUTHOR AS A JOIN NAMES AS N ON (A.name_id = N.id))
+      GROUP BY A.name_id) AS NA,(SELECT B.b_id AS bid, max(C.total_quantity), B.title
+                                 FROM BOOK AS B, (SELECT bid, SUM(quantity) AS total_quantity
+                                                  FROM ORDERITEM AS O
+                                                  GROUP BY O.bid) AS C
+                                 WHERE B.b_id = C.bid) AS BD
+WHERE NA.b_id = BD.bid
+```
 - Find the most profitable author in the database for this store (i.e. the one who has brought in the most money).
+```SQL
+SELECT fname, lname, BD.title
+FROM (SELECT fname, lname, A.b_id
+      FROM (AUTHOR AS A JOIN NAMES AS N ON (A.name_id = N.id))
+      GROUP BY A.name_id) AS NA,(SELECT B.b_id AS bid, max(C.total_quantity * B.price), B.title
+                                 FROM BOOK AS B, (SELECT bid, SUM(quantity) AS total_quantity
+                                                  FROM ORDERITEM AS O
+                                                  GROUP BY O.bid) AS C
+                                 WHERE B.b_id = C.bid) AS BD
+WHERE NA.b_id = BD.bid
+```
 - Provide a list of customer information for customers who purchased anything written by the most profitable author in the database.
+```SQL
+SELECT E.id,NAMES.fname, NAMES.lname, E.address, E.city, E.state,E.country, E.email, E.phone, E.postalcode
+FROM ENTITY AS E, (SELECT DISTINCT T.customer_id
+                   FROM (SELECT  DISTINCT O.order_id
+                         FROM ORDERITEM AS O
+                         WHERE O.bid IN (SELECT DISTINCT A.b_id
+                                         FROM AUTHOR AS A
+                                         WHERE A.name_id IN (SELECT DISTINCT NA.name_id
+                                                             FROM (SELECT A.name_id, A.b_id
+                                                                   FROM (AUTHOR AS A JOIN NAMES AS N ON (A.name_id = N.id))
+                                                                   GROUP BY A.name_id) AS NA,(SELECT B.b_id AS bid, max(C.total_quantity * B.price), B.title
+                                                                                              FROM BOOK AS B, (SELECT bid, SUM(quantity) AS total_quantity
+                                                                                                               FROM ORDERITEM AS O
+                                                                                                               GROUP BY O.bid) AS C
+                                                                                              WHERE B.b_id = C.bid) AS BD
+                                                             WHERE NA.b_id = BD.bid))) AS OID JOIN "TRANSACTION" AS T ON (OID.order_id = T.order_id)) AS TID, NAMES
+WHERE TID.customer_id = E.id AND
+  NAMES.id = E.name_id
+```
 - Provide the list of authors who wrote the books purchased by the customers who have spent more than the average customer.
+
+## Checkpoint VIEWS
