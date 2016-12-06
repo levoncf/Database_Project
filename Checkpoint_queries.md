@@ -233,3 +233,81 @@ WHERE B.b_id = K.bid AND
 -- Best selling book in all category (include the author name)
 
 ```
+## TRANSCATIONS
+
+1. Transaction Insert customer
+
+```SQL
+-- Transaction Insert customer
+
+BEGIN TRANSACTION NEW_CUSTOMER
+-- insert Customer Name into NAME table
+INSERT INTO NAMES (id, fname, lname, mname)
+VALUES (43, 'Rebecca ', 'Jackson', '');
+IF error THEN GO TO UNDO; END IF
+-- insert Customer Personal information into ENTITY
+INSERT INTO ENTITY (id, name_id, phone, email, country, city, state, postalcode, address)
+VALUES (23, 45, 6146315413, 'khawkinsm@time.com', 'United State', 'Tucson', 'Arizona', 43634, '4 Delaware Crossing');
+IF error THEN GO TO UNDO; END IF
+COMMIT
+GO TO FINISH
+UNDO
+  ROLLBACK
+FINISH:
+END TRANSACTION
+```
+
+2. Transaction Modify order information
+```SQL
+-- User input:
+    -- 1. customer_id: Use to find customer personal information and Name.
+    -- 2. order_id: customer may have multiple order with the same book.(order_id indicate which time of the order need to be changed)
+    -- 3. input_isbn: The book isbn in the order that need to be changed
+-- Modify order information based on given customer name and order_id
+-- The customer only able to change the book and quantity.
+-- To change order of book, customer need to provide the ISBN of book and the order_id(since one customer may order the same book several times)
+-- Similarly, the customer need to provide book ISBN and order_id, then locate to the ORDERITEM and UPDATE the value of quantity.
+BEGIN TRANSACTION EDIT_ORDER
+-- Update information in ORDERITEM
+-- Locate the order in ORDERITEM need to be changed
+UPDATE (SELECT O.bid AS book_id, O.quantity AS quantity
+        FROM ORDERITEM AS O, ISBN AS I
+        WHERE input_order_id in O AND
+        input_isbn = I.isbn AND
+        I.bid = O.bid) AS K
+-- Modify the book and quantity of the order.  
+SET (K.book_id, K.quantity) = (13, 2)
+IF error THEN GO TO UNDO; END IF
+COMMIT
+GO TO FINISH
+UNDO
+  ROLLBACK
+FINISH:
+END TRANSACTION
+```
+3. Transaction Delete an Order
+```SQL
+-- Once the order has complete the order information need to removed from order list
+BEGIN TRANSACTION DELETE_ORDER
+-- Locate the order and delete from ORDERITEM
+-- Then Delete it from ORDER_TRANSACTION, which is delete the customer order transaction for this order.
+
+-- locate the order to be delete
+DELETE FROM (SELECT O.order_id
+        FROM ORDERITEM AS O, ISBN AS I
+        WHERE input_order_id in O AND
+        input_isbn = I.isbn AND
+        I.bid = O.bid) AS K INNER JOIN ORDER_TRANSACTION AS OT ON (K.id = OT.order_id)
+WHERE input_order_id = O.order_id;
+IF error THEN GO TO UNDO; END IF
+-- Then delete the order information from ORDER_TRANSACTION
+DELETE FROM ORDER_TRANSACTION AS OT
+WHERE  input_order_id = OT.order_id
+IF error THEN GO TO UNDO; END IF
+COMMIT
+GO TO FINISH
+UNDO
+  ROLLBACK
+FINISH:
+END TRANSACTION
+```
