@@ -216,3 +216,20 @@ WHERE C.customer_id = OT.order_id AND
 ```
 
 ## Checkpoint VIEWS
+
+1.	For your database, propose at least two interesting views that can be built from your relations.  These views must involve joining at least two tables together each and must include some kind of aggregation in the view.  Each view must also be able to be described by a one or two sentence description in plain English.  Provide the code for constructing your views along with the English language description of what the view is supposed to be providing.
+
+```SQL
+-- Display the total inventory quantity for all books in the database
+CREATE VIEW [Inventory Info For All Books] AS
+SELECT J.ISBN, B.title, K.quantity
+FROM BOOK AS B , (SELECT DISTINCT I.bid, SUM(I.quantity) AS quantity
+            FROM INVENTORY AS I
+            GROUP BY I.bid) AS K, ISBN AS J
+WHERE B.b_id = K.bid AND
+  J.b_id = B.b_id
+```
+```SQL
+-- Best selling book in all category (include the author name)
+
+```
