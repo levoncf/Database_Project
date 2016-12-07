@@ -1,4 +1,4 @@
-REATE TABLE AUTHOR
+CREATE TABLE AUTHOR
 (
     b_id INTEGER NOT NULL,
     name_id INTEGER NOT NULL,
@@ -94,28 +94,36 @@ CREATE TABLE WAREHOUSE
     wid INTEGER PRIMARY KEY NOT NULL,
     wlocation TEXT NOT NULL
 );
-CREATE TABLE "Inventory Info For All Books"
-(
-    ISBN INTEGER,
-    title TEXT,
-    quantity TEXT
-);
-CREATE TABLE "Top 5 Best Sellers"
-(
-    title TEXT,
-    lname TEXT,
-    fname TEXT,
-    category TEXT,
-    RATING REAL,
-    t_quantity TEXT
-);
-CREATE TABLE "Top 5 Customers"
-(
-    C_ID INTEGER,
-    lname TEXT,
-    fname TEXT,
-    num_purchased TEXT
-);
+
+CREATE VIEW [Inventory Info For All Books] AS
+SELECT J.ISBN, B.title, K.quantity
+FROM BOOK AS B , (SELECT DISTINCT I.bid, SUM(I.quantity) AS quantity
+            FROM INVENTORY AS I
+            GROUP BY I.bid) AS K, ISBN AS J
+WHERE B.b_id = K.bid AND
+  J.b_id = B.b_id
+
+CREATE VIEW [Top 5 Best Sellers] AS
+   SELECT B.title, K.lname, K.fname, C.category,R.RATING, SUM(OI.quantity) AS t_quantity
+FROM BOOK AS B, ORDERITEM AS OI, CATEGORY AS C, RATING AS R ,(SELECT A.b_id, N.lname, N.fname
+   FROM NAMES AS N, AUTHOR AS A, BOOK AS B
+   WHERE A.b_id=B.b_id AND A.name_id = N.id
+   GROUP BY A.b_id) AS K
+WHERE (B.b_id=OI.bid AND B.cid=C.c_id AND B.b_id=R.b_id AND B.b_id=K.b_id)
+GROUP BY B.title
+ORDER BY t_quantity DESC
+LIMIT 5
+
+CREATE VIEW [Top 5 Customers] AS
+ 	  SELECT K.entity_id AS C_ID, N.lname, N.fname, K.num_purchased
+FROM (SELECT C.entity_id, COUNT(OT.customer_id) AS num_purchased
+FROM CUSTOMER AS C, ORDER_TRANSACTION AS OT
+WHERE (C.entity_id = OT.customer_id)
+GROUP BY C.entity_id
+ORDER BY num_purchased DESC) AS K, NAMES AS N
+WHERE K.entity_id = N.id
+LIMIT 5
+
 CREATE UNIQUE INDEX sqlite_autoindex_INVENTORY_1 ON INVENTORY (bid, wid);
 CREATE UNIQUE INDEX PUBLISHERS_publisher_uindex ON PUBLISHERS (publisher);
 
