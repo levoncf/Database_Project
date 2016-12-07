@@ -1,0 +1,5 @@
+INSERT INTO "Top 5 Best Sellers" (title, lname, fname, category, RATING, t_quantity) VALUES ('OCP: Oracle9i Certification Kit', 'Johnson', 'Joseph', 'Computer', 3.5, 121);
+INSERT INTO "Top 5 Best Sellers" (title, lname, fname, category, RATING, t_quantity) VALUES ('Access 2002 Developer''s Handbook Set', 'Gunderloy', 'Mike', 'Computer', 3.7, 33);
+INSERT INTO "Top 5 Best Sellers" (title, lname, fname, category, RATING, t_quantity) VALUES ('How To Do Everything with Your Tablet PC', 'Mann', 'Bill', 'Computer', 2.3, 27);
+INSERT INTO "Top 5 Best Sellers" (title, lname, fname, category, RATING, t_quantity) VALUES ('Fundamentals of Database Systems ', 'Navathe', 'Shamkant', 'Computer', 1.7, 26);
+INSERT INTO "Top 5 Best Sellers" (title, lname, fname, category, RATING, t_quantity) VALUES ('Going Postal', 'Pratchett', 'Terry', 'Fantasy', 2.8, 23);

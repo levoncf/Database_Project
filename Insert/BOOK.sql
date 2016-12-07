@@ -14,3 +14,8 @@ INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (13, 'Pyramids', 61
 INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (14, 'The Color of Magic', 61, 2005, 13.99, 12);
 INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (15, 'Guards! Guards!', 61, 2001, 7.99, 12);
 INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (16, 'Unseen Academicals', 61, 2010, 7.99, 12);
+INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (17, 'Investing in Fixer-Uppers : A Complete Guide to Buying Low, Fixing Smart, Adding Value, and Selling (or Renting) High', 13, 2003, 18.95, 13);
+INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (18, 'MySQL', 6, 2003, 34.99, 11);
+INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (19, 'Cerulean Sins', 10, 2003, 16.07, 14);
+INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (20, 'The Secret Life of Bees', 11, 2003, 14, 14);
+INSERT INTO BOOK (b_id, title, pid, year, price, cid) VALUES (21, 'Google Hacks', 12, 2003, 24.95, 11);

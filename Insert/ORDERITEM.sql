@@ -1,4 +1,4 @@
-INSERT INTO ORDERITEM (id, order_id, bid, quantity, timestamp) VALUES (1, 1, 1, 10, '2016-11-11 06:17:23');
+INSERT INTO ORDERITEM (id, order_id, bid, quantity, timestamp) VALUES (1, 1, 1, 100, '2016-11-11 06:17:23');
 INSERT INTO ORDERITEM (id, order_id, bid, quantity, timestamp) VALUES (2, 2, 3, 3, '2016-11-11 06:17:23');
 INSERT INTO ORDERITEM (id, order_id, bid, quantity, timestamp) VALUES (3, 1, 5, 1, '2016-11-11 06:17:23');
 INSERT INTO ORDERITEM (id, order_id, bid, quantity, timestamp) VALUES (4, 1, 5, 1, '2016-11-11 06:17:23');

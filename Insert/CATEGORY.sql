@@ -10,3 +10,5 @@ INSERT INTO CATEGORY (c_id, category) VALUES (9, 'Children');
 INSERT INTO CATEGORY (c_id, category) VALUES (10, 'Art');
 INSERT INTO CATEGORY (c_id, category) VALUES (11, 'Computer');
 INSERT INTO CATEGORY (c_id, category) VALUES (12, 'Fantasy');
+INSERT INTO CATEGORY (c_id, category) VALUES (13, 'Accounting & Finance');
+INSERT INTO CATEGORY (c_id, category) VALUES (14, 'Literature & Fiction');

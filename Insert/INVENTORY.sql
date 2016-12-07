@@ -14,3 +14,8 @@ INSERT INTO INVENTORY (bid, wid, quantity, sold) VALUES (13, 2, 2, 0);
 INSERT INTO INVENTORY (bid, wid, quantity, sold) VALUES (14, 3, 8, 0);
 INSERT INTO INVENTORY (bid, wid, quantity, sold) VALUES (15, 3, 9, 0);
 INSERT INTO INVENTORY (bid, wid, quantity, sold) VALUES (16, 4, 20, 0);
+INSERT INTO INVENTORY (bid, wid, quantity, sold) VALUES (17, 1, 27, 10);
+INSERT INTO INVENTORY (bid, wid, quantity, sold) VALUES (18, 4, 49, 18);
+INSERT INTO INVENTORY (bid, wid, quantity, sold) VALUES (19, 2, 45, 3);
+INSERT INTO INVENTORY (bid, wid, quantity, sold) VALUES (20, 1, 15, 12);
+INSERT INTO INVENTORY (bid, wid, quantity, sold) VALUES (21, 1, 38, 20);
