@@ -3,7 +3,8 @@
 ## Queries from Checkpoint 2
 
 - Find the titles of all books by Pratchett that cost less than $10.
-
+- π B.b_id, B.title 
+  σ A.name_id = N.id and N.lname like 'Pratchett%' and A.b_id = B.b_id
   ```sql
   SELECT B.b_id, B.title
   FROM BOOK AS B
@@ -16,7 +17,7 @@
   ```
 
 - Give all the titles and their dates of purchase made by a single customer (you choose how to designate the customer).
-
+- π ISBN, title σ IV.quantity < 5 and IV.bid = I.b_id and I.b_id = B.b_id ρ I ISBN ⨯ ρ B BOOK ⨯ ρ IV INVENTORY
   ```sql
   SELECT OIT.bid, B.title, OIT.timestamp, OIT.quantity
   FROM BOOK AS B, ORDER_TRANSACTION AS O, ORDERITEM AS OIT
@@ -32,6 +33,7 @@
   ```
 
 - Find the titles and ISBNs for all books with less than 5 copies in stock.
+- π ISBN, title σ IV.quantity < 5 and IV.bid = I.b_id and I.b_id = B.b_id ρ I ISBN ⨯ ρ B BOOK ⨯ ρ IV INVENTORY
 ```SQL
 SELECT ISBN, title
 FROM ISBN AS I, BOOK AS B, INVENTORY AS IV
@@ -40,6 +42,7 @@ WHERE IV.quantity < 5 AND
   I.b_id = B.b_id;
 ```
 - Give all the customers who purchased a book by Pratchett and the titles of Pratchett books they purchased.
+- 
 ```SQL
 SELECT NAMES.fname, NAMES.lname, B.title
 FROM BOOK AS B, NAMES
@@ -134,6 +137,7 @@ WHERE customer_total > (SELECT AVG(customer_total) FROM (CustTotals))
 ORDER BY customer_total DESC
 ```
 - Provide a list of the titles in the database and associated total copies sold to customers, sorted from the title that has sold the most individual copies to the title that has sold the least.
+- τ C.total_quantity desc π title, C.total_quantity σ B.b_id = C.bid ρ B BOOK ⨯ ρ C ( π bid, total_quantity γ O.bid; SUM(quantity)→total_quantity ρ O ORDERITEM)
 ```SQL
 SELECT title, C.total_quantity
 FROM BOOK AS B, (SELECT bid, SUM(quantity) AS total_quantity
